@@ -10,7 +10,8 @@
       "Bash(npx tsc)",
       "Bash(timeout 5 node:*)",
       "Bash(npm run build:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(gh issue create:*)"
     ]
   }
 }

@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@source "../views/**/*.hbs";
+@source "../src/**/*.ts";
+
+@theme {
+  --color-docker-blue: #0db7ed;
+  --color-docker-dark: #384d54;
+}
+
+@layer components {
+  .status-running {
+    background-color: var(--color-green-100);
+    color: var(--color-green-800);
+    border-color: var(--color-green-200);
+  }
+
+  .status-stopped {
+    background-color: var(--color-red-100);
+    color: var(--color-red-800);
+    border-color: var(--color-red-200);
+  }
+
+  .status-paused {
+    background-color: var(--color-yellow-100);
+    color: var(--color-yellow-800);
+    border-color: var(--color-yellow-200);
+  }
+
+  .status-restarting {
+    background-color: var(--color-blue-100);
+    color: var(--color-blue-800);
+    border-color: var(--color-blue-200);
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "homestack",
+  "version": "1.0.0",
+  "description": "Web UI for Docker Engine on headless Linux servers",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:css\" \"npm run dev:server\"",
+    "dev:server": "tsx watch src/index.ts",
+    "dev:css": "npx @tailwindcss/cli -i ./styles/input.css -o ./public/css/styles.css --watch",
+    "build": "npm run build:css && npm run build:ts",
+    "build:ts": "tsc",
+    "build:css": "npx @tailwindcss/cli -i ./styles/input.css -o ./public/css/styles.css --minify",
+    "start": "node dist/index.js",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "docker:build": "docker build -t homestack -f docker/Dockerfile .",
+    "docker:run": "docker run -p 127.0.0.1:3000:3000 -v /var/run/docker.sock:/var/run/docker.sock homestack"
+  },
+  "keywords": [
+    "docker",
+    "management",
+    "ui",
+    "homelab",
+    "self-hosted"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "dockerode": "^4.0.9",
+    "express": "^5.2.1",
+    "express-handlebars": "^8.0.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "@types/dockerode": "^3.3.47",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.7",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "autoprefixer": "^10.4.23",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.2",
+    "postcss": "^8.5.6",
+    "prettier": "^3.7.4",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

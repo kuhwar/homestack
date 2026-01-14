@@ -11,7 +11,9 @@
       "Bash(timeout 5 node:*)",
       "Bash(npm run build:*)",
       "Bash(git add:*)",
-      "Bash(gh issue create:*)"
+      "Bash(gh issue create:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:hub.docker.com)"
     ]
   }
 }

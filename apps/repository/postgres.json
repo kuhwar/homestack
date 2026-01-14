@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "id": "postgres",
+    "name": "PostgreSQL",
+    "description": "PostgreSQL is a powerful, open source object-relational database system with over 35 years of active development.",
+    "icon": "database",
+    "category": "database",
+    "tags": ["database", "sql", "relational", "postgresql"],
+    "version": "18-alpine",
+    "maintainer": "PostgreSQL Global Development Group",
+    "documentation": "https://www.postgresql.org/docs/"
+  },
+  "docker": {
+    "image": "postgres:18-alpine",
+    "restartPolicy": "unless-stopped",
+    "networkMode": "bridge"
+  },
+  "configuration": {
+    "fields": [
+      {
+        "key": "postgres_password",
+        "label": "PostgreSQL Password",
+        "description": "Superuser password for the PostgreSQL instance (required)",
+        "type": "password",
+        "envVar": "POSTGRES_PASSWORD",
+        "validation": {
+          "required": true,
+          "minLength": 8,
+          "patternMessage": "Password must be at least 8 characters"
+        }
+      },
+      {
+        "key": "postgres_user",
+        "label": "PostgreSQL User",
+        "description": "Superuser username (defaults to 'postgres')",
+        "type": "string",
+        "default": "postgres",
+        "envVar": "POSTGRES_USER",
+        "validation": {
+          "required": false,
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+          "patternMessage": "Username must start with a letter or underscore and contain only alphanumeric characters"
+        }
+      },
+      {
+        "key": "postgres_db",
+        "label": "Default Database",
+        "description": "Name of the default database to create (defaults to username)",
+        "type": "string",
+        "default": "postgres",
+        "envVar": "POSTGRES_DB",
+        "validation": {
+          "required": false,
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+          "patternMessage": "Database name must start with a letter or underscore and contain only alphanumeric characters"
+        }
+      },
+      {
+        "key": "pgdata",
+        "label": "Data Directory",
+        "description": "Location for database files inside the container",
+        "type": "string",
+        "default": "/var/lib/postgresql/data",
+        "envVar": "PGDATA",
+        "validation": {
+          "required": false
+        }
+      }
+    ]
+  },
+  "volumes": [
+    {
+      "containerPath": "/var/lib/postgresql",
+      "description": "PostgreSQL data directory for persistent storage",
+      "required": true
+    },
+    {
+      "containerPath": "/docker-entrypoint-initdb.d",
+      "description": "Initialization scripts directory (*.sql, *.sh files run on first startup)",
+      "required": false
+    }
+  ],
+  "ports": [
+    {
+      "containerPort": 5432,
+      "protocol": "tcp",
+      "description": "PostgreSQL server port",
+      "defaultHostPort": 5432
+    }
+  ],
+  "healthCheck": {
+    "type": "command",
+    "command": "pg_isready -U ${POSTGRES_USER:-postgres}",
+    "interval": 30,
+    "timeout": 10,
+    "retries": 3,
+    "startPeriod": 30
+  },
+  "lifecycle": {
+    "backup": {
+      "command": "pg_dumpall -U ${POSTGRES_USER:-postgres}",
+      "paths": ["/var/lib/postgresql"]
+    },
+    "restore": {
+      "command": "psql -U ${POSTGRES_USER:-postgres} -f /restore/backup.sql"
+    }
+  }
+}

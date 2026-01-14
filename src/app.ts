@@ -3,6 +3,7 @@ import { engine } from 'express-handlebars';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import routes from './routes/index.js';
+import appsRoutes from './routes/apps.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,5 +44,6 @@ app.use(express.static(path.join(rootDir, 'public')));
 
 // Routes
 app.use('/', routes);
+app.use('/apps', appsRoutes);
 
 export default app;
